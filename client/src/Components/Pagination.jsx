@@ -1,4 +1,4 @@
-export default function Component() {
+export default function Pagination() {
     return (
         <div className="pagination position">
             <div className="limits">

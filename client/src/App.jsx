@@ -4,7 +4,7 @@ import Header from "./Components/Header";
 import UserList from "./Components/UserList";
 
 function App() {
-    return(
+    return (
         <>
             {/* <!-- Header component --> */}
             <Header />
@@ -190,7 +190,7 @@ function App() {
             {/* <!-- Footer component  --> */}
             <Footer />
         </>
-    )
+    );
 }
 
 export default App;

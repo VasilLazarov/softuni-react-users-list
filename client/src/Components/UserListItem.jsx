@@ -1,6 +1,6 @@
 import { fromIsoDate } from "../utils/dateTimeUtils";
 
-export default function Component({
+export default function UserListItem({
     firstName,
     lastName,
     email,
