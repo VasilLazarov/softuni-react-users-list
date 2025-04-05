@@ -1,12 +1,14 @@
-export default function UserCreate() {
+export default function UserCreate({
+    onClose,
+}) {
     return (
         <div className="overlay">
-            <div className="backdrop"></div>
+            <div className="backdrop" onClick={onClose}></div> {/* onClick for close when we click outside the window */}
             <div className="modal">
                 <div className="user-container">
                     <header className="headers">
                         <h2>Edit User/Add User</h2>
-                        <button className="btn close">
+                        <button className="btn close" onClick={onClose}>
                             <svg
                                 aria-hidden="true"
                                 focusable="false"
@@ -162,6 +164,7 @@ export default function UserCreate() {
                                 id="action-cancel"
                                 className="btn"
                                 type="button"
+                                onClick={onClose}
                             >
                                 Cancel
                             </button>
