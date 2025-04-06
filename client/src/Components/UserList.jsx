@@ -11,7 +11,7 @@ import UserInfo from "./UserInfo";
 export default function UserList() {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
-    const [userIdInfo, setUserIdInfo] = useState(); // By default undefined
+    const [userIdInfo, setUserIdInfo] = useState(null); // By default undefined
 
     useEffect(() => {
         userService.getAll()
@@ -55,6 +55,10 @@ export default function UserList() {
     const userInfoClickHandler = (userId) => {
         setUserIdInfo(userId);
     }
+    const userInfoCloseHandler = () => {
+        setUserIdInfo(null);
+
+    }
 
     return (
         <section className="card users-container">
@@ -71,6 +75,7 @@ export default function UserList() {
             {userIdInfo && 
                 <UserInfo 
                     userId={userIdInfo}
+                    onClose={userInfoCloseHandler}
                 />
             }
 
