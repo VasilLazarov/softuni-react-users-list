@@ -1,14 +1,33 @@
-export default function UserCreate({
-    onClose,
-    onSave,
+import { useEffect, useState } from "react";
+import userService from "../Services/userService";
+
+export default function UserCreate({ 
+    userId, 
+    onClose, 
+    onSave, 
+    onEdit,
 }) {
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        if(!userId){
+            return;
+        }
+
+        userService.getOne(userId)
+            .then((result) => {
+                setUser(result);
+            });
+    }, [userId]);
+
     return (
         <div className="overlay">
-            <div className="backdrop" onClick={onClose}></div> {/* onClick for close when we click outside the window */}
+            <div className="backdrop" onClick={onClose}></div>{" "}
+            {/* onClick for close when we click outside the window */}
             <div className="modal">
                 <div className="user-container">
                     <header className="headers">
-                        <h2>Add User</h2>
+                        <h2>{userId ? "Edit" : "Add"} User</h2>
                         <button className="btn close" onClick={onClose}>
                             <svg
                                 aria-hidden="true"
@@ -27,7 +46,7 @@ export default function UserCreate({
                             </svg>
                         </button>
                     </header>
-                    <form onSubmit={onSave}>
+                    <form>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -39,6 +58,7 @@ export default function UserCreate({
                                         id="firstName"
                                         name="firstName"
                                         type="text"
+                                        defaultValue={user.firstName}
                                     />
                                 </div>
                             </div>
@@ -52,6 +72,7 @@ export default function UserCreate({
                                         id="lastName"
                                         name="lastName"
                                         type="text"
+                                        defaultValue={user.lastName}
                                     />
                                 </div>
                             </div>
@@ -68,11 +89,14 @@ export default function UserCreate({
                                         id="email"
                                         name="email"
                                         type="text"
+                                        defaultValue={user.email}
                                     />
                                 </div>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="phoneNumber">Phone number</label>
+                                <label htmlFor="phoneNumber">
+                                    Phone number
+                                </label>
                                 <div className="input-wrapper">
                                     <span>
                                         <i className="fa-solid fa-phone"></i>
@@ -81,6 +105,7 @@ export default function UserCreate({
                                         id="phoneNumber"
                                         name="phoneNumber"
                                         type="text"
+                                        defaultValue={user.phoneNumber}
                                     />
                                 </div>
                             </div>
@@ -96,6 +121,7 @@ export default function UserCreate({
                                     id="imageUrl"
                                     name="imageUrl"
                                     type="text"
+                                    defaultValue={user.imageUrl}
                                 />
                             </div>
                         </div>
@@ -111,6 +137,7 @@ export default function UserCreate({
                                         id="country"
                                         name="country"
                                         type="text"
+                                        defaultValue={user.address?.country}
                                     />
                                 </div>
                             </div>
@@ -120,7 +147,7 @@ export default function UserCreate({
                                     <span>
                                         <i className="fa-solid fa-city"></i>
                                     </span>
-                                    <input id="city" name="city" type="text" />
+                                    <input id="city" name="city" type="text" defaultValue={user.address?.city}/>
                                 </div>
                             </div>
                         </div>
@@ -136,11 +163,14 @@ export default function UserCreate({
                                         id="street"
                                         name="street"
                                         type="text"
+                                        defaultValue={user.address?.street}
                                     />
                                 </div>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="streetNumber">Street number</label>
+                                <label htmlFor="streetNumber">
+                                    Street number
+                                </label>
                                 <div className="input-wrapper">
                                     <span>
                                         <i className="fa-solid fa-house-chimney"></i>
@@ -149,18 +179,31 @@ export default function UserCreate({
                                         id="streetNumber"
                                         name="streetNumber"
                                         type="text"
+                                        defaultValue={user.address?.streetNumber}
                                     />
                                 </div>
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button
-                                id="action-save"
-                                className="btn"
-                                type="submit"
-                            >
-                                Save
-                            </button>
+                            {userId ? (
+                                <button
+                                    id="action-save"
+                                    className="btn"
+                                    type="submit"
+                                    onClick={onEdit}
+                                >
+                                    Edit
+                                </button>
+                            ) : (
+                                <button
+                                    id="action-save"
+                                    className="btn"
+                                    type="submit"
+                                    onClick={onSave}
+                                >
+                                    Safe
+                                </button>
+                            )}
                             <button
                                 id="action-cancel"
                                 className="btn"
