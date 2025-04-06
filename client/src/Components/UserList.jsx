@@ -7,11 +7,13 @@ import Pagination from "./Pagination";
 import UserListItem from "./UserListItem";
 import UserCreate from "./UserCreate";
 import UserInfo from "./UserInfo";
+import UserDelete from "./UserDelete";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
-    const [userIdInfo, setUserIdInfo] = useState(null); // By default undefined
+    const [userIdInfo, setUserIdInfo] = useState(null);
+    const [userIdDelete, setUserIdDelete] = useState(null);
 
     useEffect(() => {
         userService.getAll()
@@ -57,7 +59,23 @@ export default function UserList() {
     }
     const userInfoCloseHandler = () => {
         setUserIdInfo(null);
+    }
 
+    const userDeleteClickHandler = (userId) => {
+        setUserIdDelete(userId);
+    }
+    const userDeleteCloseHandler = () => {
+        setUserIdDelete(null);
+    }
+    const userDeleteHandler = async () => {
+        // Delete request to server
+        await userService.delete(userIdDelete);
+
+        // Delete from local state
+        setUsers(state => state.filter(user => user._id !== userIdDelete));
+
+        // Close Modal
+        setUserIdDelete(null);
     }
 
     return (
@@ -78,6 +96,15 @@ export default function UserList() {
                     onClose={userInfoCloseHandler}
                 />
             }
+
+            {userIdDelete &&
+                <UserDelete 
+                    userId={userIdDelete}
+                    onClose={userDeleteCloseHandler}
+                    onDelete={userDeleteHandler}
+                />
+            }
+            
 
             {/* <!-- Table component --> */}
             <div className="table-wrapper">
@@ -233,6 +260,7 @@ export default function UserList() {
                         {users.map(user => <UserListItem 
                             key={user._id} 
                             onInfoClick={userInfoClickHandler}
+                            onDeleteClick={userDeleteClickHandler}
                             {...user} />)}
                         {/* <UserListItem /> */}
                     </tbody>
